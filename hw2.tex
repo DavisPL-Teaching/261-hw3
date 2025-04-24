@@ -10,7 +10,16 @@
 
 \usepackage[margin=1.5in]{geometry}
 
+\usepackage{xcolor}
 \usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    linkcolor={red!50!black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black}
+}
+
+\newcommand{\visiblehref}[2]{\href{#1}{#2}\footnote{\url{#1}}}
 
 \begin{document}
 
@@ -22,15 +31,28 @@
 
 \begin{enumerate}
 \item
-Say that a specification is ``expressible in Z3'' if it can be written as a Python program \texttt{def spec(prog)} that takes as input a string containing the source code of a program \texttt{prog}, and returns a Z3 formula.
+Say that a specification is ``expressible in Z3'' if it can be written as a Python program \texttt{def spec(prog):} that takes as input a string containing the source code of a program \texttt{prog}, and returns a Z3 formula.
 The specification is true exactly when the Z3 formula is valid.
 Show that for any two different programs \texttt{prog1} and \texttt{prog2},
 they are distinguishable: there exists a spec which \texttt{prog1} satisfies and \texttt{prog2} does not.
-Prove your answer.
+Implement a function that realizes your answer, and add a unit test with an example of two particular programs for which the Z3 spec works.
+\begin{verbatim}
+def true_of_prog1_but_not_prog2(prog1, prog2):
+    raise NotImplementedError
+
+def test_true_of_prog1_but_not_prog2():
+    raise NotImplementedError
+\end{verbatim}
+
+\textbf{Note:}
+This problem shows that if we were to define the partial order of programs such that \texttt{prog1}
+is a ``refinement'' of \texttt{prog2} if all specs which \texttt{prog1} satisfy also satisfy \texttt{prog2} (similar to stronger and weaker specs, but for programs), this partial ordering would be trivial: it would just be a set of discrete points, no two points comparable.
 
 \item
-Consider the theory of integers and real numbers that we saw in class.
-The syntax uses function symbols $\{+, *, -\}$ and relation symbols $\{=, <\}$:
+Consider the theory of integers and real numbers (under basic arithmetic) that we saw in class.
+Recall the syntax as follows:
+% The grammar uses function symbols $\{+, *, -, 0, 1\}$ and relation symbols $\{=, <\}$,
+% and there are no quantifiers.
 \begin{verbatim}
     Var ::= n1, n2, n3, ...
     Expr ::= Expr + Expr | Expr - Expr | Expr * Expr
@@ -42,7 +64,7 @@ The syntax uses function symbols $\{+, *, -\}$ and relation symbols $\{=, <\}$:
 \begin{enumerate}[(a)]
 \item Give an example of a formula that is satisfiable over the real numbers but not the integers.
 \item Prove formally that every expression satisfiable over the integers is satisfiable over the real numbers.
-\item Define the theory of truncated 8-bit integers as follows: again we use the same grammar, but now integers are forced to be between $-2^{32}$ and $2^{32} - 1$, inclusive. If an expression goes out-of-bounds, we wrap around to the maximum value: for example, $2^{30} + 2^{30} = 2^{31} - 1$ as this is the maximum value available. Similarly $2^{16} * 2^{30} = 2^{31} - 1$, $-5 - (2^{31} - 1) = -2^{31}$ and $(-1) * (-2^{32}) = 2^{31} - 1$.
+\item Define the theory of truncated 32-bit integers as follows: again we use the same grammar, but now integers are forced to be between $-2^{31}$ and $2^{31} - 1$, inclusive. If an expression goes out-of-bounds, we wrap around to the maximum value: for example, $2^{30} + 2^{30} = 2^{31} - 1$ as this is the maximum value available. Similarly $2^{16} * 2^{30} = 2^{31} - 1$, $-5 - (2^{31} - 1) = -2^{31}$ and $(-1) * (-2^{31}) = 2^{31} - 1$.
 
 Is every formula satisfiable over the integers satisfiable over this theory?
 Is every formula satisfiable over this theory satisfiable over the integers?
@@ -50,11 +72,47 @@ Justify both answers.
 \end{enumerate}
 
 \item
-\emph{Symbolic execution} is a static analysis technique where we ``run'' a program by evaluating expressions as symbols and formulas,
-instead of using concrete values.
+In class, we mentioned that the theory of strings in Z3 (with regular expression constraints)
+can be used to precisely define constraints like ``any string matching a US phone number.''
+
+Define a function which returns a formula valid exactly for valid dates in \texttt{dd-mmm-yyyy} format
+in the Gregorian calendar.
+Your function should take as input a Z3 string variable (like \texttt{z3.String("s")} -- note that this denotes
+the string variable with variable name \texttt{s}, not the literal tring \texttt{"s"}).
+It should output a formula which is true exactly for strings which are dates
+between January 1, 1900 and December 31, 2099, inclusive in the form \texttt{dd-mmm-yyyy}
+(i.e., three letters for the month in lower case, two digits for the day, and four digits for the year).
+
+Test your regular expression first by putting in constant string regexes, and second
+by using it to generate an arbitrary regex in the current year 2025.
+It is OK if Z3 doesn't terminate for one of your tests (use \texttt{pytest.mark.skip})
+(but virtual bonus points if you can get Z3 to pass both tests).
+
+\begin{verbatim}
+def valid_gregorian_date(s):
+    raise NotImplementedError
+
+def test_valid_date_string_1():
+    // Use the function above to test specific valid date(s) and invalid date(s)
+    raise NotImplementedError
+
+def test_valid_date_string_2():
+    // Use the function above to generate a date in the current year 2025
+    raise NotImplementedError
+\end{verbatim}
+
+\textbf{Hints:}
+For help with Z3 regular expression syntax, it will be useful to refer to the \visiblehref{https://github.com/DavisPL-Teaching/261/blob/main/lecture2/extras/regex\_help.md}{the regex help notes} in the course repository.
+You may also want to review the rules for leap days; see \visiblehref{https://en.wikipedia.org/wiki/February\_29}{Wikipedia.}
+
+\item
+
+
+\item
+\emph{Symbolic execution} is a static analysis technique where we ``run'' a program by evaluating expressions as symbols and formulas, instead of using concrete values.
 For example, the function in Python \texttt{def add(x):} with body \texttt{return x + 7} would normally be evaluated
 by plugging an integer like $10$ and returning $17$. With symbolic execution, instead we plug in the value
-\texttt{z3.Int("x")} and return the value \texttt{z3.Int("x") + 7}, that is we return the symbolic integer expression $(x + 7)$. We can then answer questions aout the behavior of the function, for example, ``does there exist an input for which the output is exactly $10$?'' or ``does there exist an input for which the output is out of bounds for an array?'' by making a query to Z3.
+\texttt{z3.Int("x")} and return the value \texttt{z3.Int("x") + 7}, that is we return the symbolic integer expression $(x + 7)$. We can then answer questions aout the behavior of the function, for example, ``does there exist an input for which the output is exactly $10$?'' or ``does there exist an input for which the output is out of bounds for an array?'' by making an appropriate query to Z3.
 
 Use Z3 to decide whether the following has an infinite loop bug.
 The program has 4 paths leading up to the potential infinite loop; you don't need to implement a general symbolic execution engine, just describe the Z3 formula along each path.
@@ -73,8 +131,12 @@ Report your answer:
 Sketch your answer by providing a single Z3 formula that would result from this solution.
 \end{enumerate}
 
-Attach your Z3 code with your submission as a file \texttt{hw2\_q2.py}.
-
 \end{enumerate}
+
+\noindent
+\textbf{Turning in:}
+Upload your solutions as a PDF in Gradescope.
+Attach your code for parts 1, 3, and 5 with your submission.
+Please name the file \texttt{hw2.py} and include any helper files.
 
 \end{document}
