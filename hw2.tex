@@ -64,7 +64,7 @@ Recall the syntax as follows:
 \begin{enumerate}[(a)]
 \item Give an example of a formula that is satisfiable over the real numbers but not the integers.
 \item Prove formally that every expression satisfiable over the integers is satisfiable over the real numbers.
-\item Define the theory of truncated 32-bit integers as follows: again we use the same grammar, but now integers are forced to be between $-2^{31}$ and $2^{31} - 1$, inclusive. If an expression goes out-of-bounds, we wrap around to the maximum value: for example, $2^{30} + 2^{30} = 2^{31} - 1$ as this is the maximum value available. Similarly $2^{16} * 2^{30} = 2^{31} - 1$, $-5 - (2^{31} - 1) = -2^{31}$ and $(-1) * (-2^{31}) = 2^{31} - 1$.
+\item Define the theory of truncated 32-bit integers as follows: again we use the same grammar, but now integers are forced to be between $\texttt{MIN} = -2^{31}$ and $\texttt{MAX} = 2^{31} - 1$, inclusive. If an expression goes out-of-bounds, we wrap around to the maximum value: for example, $2^{30} + 2^{30} = \texttt{MAX}$ as this is the maximum value available. Similarly $2^{16} * 2^{30} = \texttt{MAX}$, $(-5) - \texttt{MAX} = -2^{31}$ and $(-2^{20}) * (-2^{20}) = \texttt{MAX}$.
 
 Is every formula satisfiable over the integers satisfiable over this theory?
 Is every formula satisfiable over this theory satisfiable over the integers?
@@ -93,11 +93,12 @@ def valid_gregorian_date(s):
     raise NotImplementedError
 
 def test_valid_date_string_1():
-    // Use the function above to test specific valid date(s) and invalid date(s)
+    // Use the function above to test specific valid date(s) and
+    // invalid date(s)
     raise NotImplementedError
 
 def test_valid_date_string_2():
-    // Use the function above to generate a date in the current year 2025
+    // Use the function to generate a date in the current year 2025
     raise NotImplementedError
 \end{verbatim}
 
@@ -106,7 +107,16 @@ For help with Z3 regular expression syntax, it will be useful to refer to the \v
 You may also want to review the rules for leap days; see \visiblehref{https://en.wikipedia.org/wiki/February\_29}{Wikipedia.}
 
 \item
+Consider the grammar for the theory of strings (the basic version that just includes string variables, concatenation, character constants, length constraings, and regex constraints).
+Suppose we were to add an additional construct to this theory:
+\begin{center}
+\texttt{PrefixOf(StrExpr, StrExpr)}
+\end{center}
+that evaluates to true iff the first string expression is a substring of the second one.
 
+Prove that this would not increase the fundamental expressiveness of our theory by showing that
+any formula $\varphi$ with \texttt{PrefixOf} can be reduced to a formula $\varphi'$ without \texttt{PrefixOf} that is equivalently satisfiable.
+That is, $\varphi$ is satisfiable iff $\varphi'$ is satisfiable.
 
 \item
 \emph{Symbolic execution} is a static analysis technique where we ``run'' a program by evaluating expressions as symbols and formulas, instead of using concrete values.
@@ -115,10 +125,42 @@ by plugging an integer like $10$ and returning $17$. With symbolic execution, in
 \texttt{z3.Int("x")} and return the value \texttt{z3.Int("x") + 7}, that is we return the symbolic integer expression $(x + 7)$. We can then answer questions aout the behavior of the function, for example, ``does there exist an input for which the output is exactly $10$?'' or ``does there exist an input for which the output is out of bounds for an array?'' by making an appropriate query to Z3.
 
 Use Z3 to decide whether the following has an infinite loop bug.
-The program has 4 paths leading up to the potential infinite loop; you don't need to implement a general symbolic execution engine, just describe the Z3 formula along each path.
+The program has 4 paths leading up to the potential infinite loop; you don't need to implement a symbolic execution engine, and you don't need to write an algorithm to compute the answer (for an arbitrary input program); just write down the Z3 formula along each path for this particular program.
 
 \begin{verbatim}
-TODO
+UNITED_STATES = 1
+CANADA = 2
+MEXICO = 3
+BRAZIL = 4
+
+def add_user(username, location_id):
+    // username: a username of type String
+    // location_id: an integer
+    if username == "":
+        print("Error: empty username")
+        return
+    if location_id < 0 or location_id not in [
+            UNITED_STATES, CANADA, MEXICO, BRAZIL
+        ]:
+        print("Error: country not supported")
+        return
+
+    if len(username) > 50:
+        user_token = (
+            "<user>" + username[:47] + "..." + "</user>"
+            + "<location>" + str(location_id) + "</location>"
+        )
+    else:
+        user_token = (
+            "<user>" + username + "</user>"
+            + "<location>" + str(location_id) + "</location>"
+        )
+
+    while "<script>" in user_token:
+        print("Error: invalid user token; please try again")
+
+    database.add_user(username, location_id, user_token)
+
 \end{verbatim}
 
 Report your answer:
