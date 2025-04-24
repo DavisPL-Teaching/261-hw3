@@ -23,26 +23,37 @@
 
 \begin{document}
 
-\title{ECS 261 HW2 Problem Set}
-\author{Your Name}
-\date{Due Friday, May 2, 2025}
+\title{HW2 Problem Set}
+\author{ECS 261}
+\date{Due: Monday, May 5, 2025}
 
 \maketitle
 
 \begin{enumerate}
 \item
-Say that a specification is ``expressible in Z3'' if it can be written as a Python program \texttt{def spec(prog):} that takes as input a string containing the source code of a program \texttt{prog}, and returns a Z3 formula.
+Say that a specification is ``expressible in Z3'' if it can be written as a Python program \texttt{def spec(prog):} that takes as input a string variable representing the source code of a program \texttt{prog}, and returns a Z3 formula.
 The specification is true exactly when the Z3 formula is valid.
 Show that for any two different programs \texttt{prog1} and \texttt{prog2},
 they are distinguishable: there exists a spec which \texttt{prog1} satisfies and \texttt{prog2} does not.
-Implement a function that realizes your answer, and add a unit test with an example of two particular programs for which the Z3 spec works.
+Implement a function that realizes your answer.
+It should take as input two strings, and return the spec in the above form, i.e. a function from string variables to Z3 formulas.
+Add a unit test with an example of two particular programs for which the Z3 spec works.
 \begin{verbatim}
 def true_of_prog1_but_not_prog2(prog1, prog2):
+    # Return a spec in the above form, i.e. return a function
+    #     def spec(prog): ...
+    # where prog is a Z3 string variable, and which returns a formula
+    # valid for prog1 but not for prog2.
     raise NotImplementedError
 
 def test_true_of_prog1_but_not_prog2():
     raise NotImplementedError
 \end{verbatim}
+
+As your answer to this problem, explain how your solution works (in a paragraph) and report the results of what happens when you run it, as well as any other interesting observations.
+Attach your code with your submission.
+
+% Do you think it is possible to solve this in a way that is purely semantic, rather than syntactic? Why or why not?
 
 \textbf{Note:}
 This problem shows that if we were to define the partial order of programs such that \texttt{prog1}
@@ -64,7 +75,7 @@ Recall the syntax as follows:
 \begin{enumerate}[(a)]
 \item Give an example of a formula that is satisfiable over the real numbers but not the integers.
 \item Prove formally that every expression satisfiable over the integers is satisfiable over the real numbers.
-\item Define the theory of truncated 32-bit integers as follows: again we use the same grammar, but now integers are forced to be between $\texttt{MIN} = -2^{31}$ and $\texttt{MAX} = 2^{31} - 1$, inclusive. If an expression goes out-of-bounds, we wrap around to the maximum value: for example, $2^{30} + 2^{30} = \texttt{MAX}$ as this is the maximum value available. Similarly $2^{16} * 2^{30} = \texttt{MAX}$, $(-5) - \texttt{MAX} = -2^{31}$ and $(-2^{20}) * (-2^{20}) = \texttt{MAX}$.
+\item Define the theory of truncated 32-bit integers as follows: again we use the same grammar, but now integers are forced to be between $\texttt{MIN} = -2^{31}$ and $\texttt{MAX} = 2^{31} - 1$, inclusive. If an expression goes out-of-bounds, we wrap around to the maximum value: for example, $2^{30} + 2^{30} = \texttt{MAX}$ as this is the maximum value available. Similarly $2^{16} * 2^{30} = \texttt{MAX}$, $(-5) - \texttt{MAX} = \texttt{MIN}$ and $(-2^{20}) * (-2^{20}) = \texttt{MAX}$.
 
 Is every formula satisfiable over the integers satisfiable over this theory?
 Is every formula satisfiable over this theory satisfiable over the integers?
@@ -72,35 +83,40 @@ Justify both answers.
 \end{enumerate}
 
 \item
-In class, we mentioned that the theory of strings in Z3 (with regular expression constraints)
+In class, we mentioned that the theory of strings in Z3 -- with concatenation, length, and regular expression constraints --
 can be used to precisely define constraints like ``any string matching a US phone number.''
 
 Define a function which returns a formula valid exactly for valid dates in \texttt{dd-mmm-yyyy} format
 in the Gregorian calendar.
 Your function should take as input a Z3 string variable (like \texttt{z3.String("s")} -- note that this denotes
-the string variable with variable name \texttt{s}, not the literal tring \texttt{"s"}).
-It should output a formula which is true exactly for strings which are dates
-between January 1, 1900 and December 31, 2099, inclusive in the form \texttt{dd-mmm-yyyy}
-(i.e., three letters for the month in lower case, two digits for the day, and four digits for the year).
+the string variable with variable name \texttt{s}, not the literal tring \texttt{"s"})
+or a string expression (like \texttt{z3.String("s1") + z3.String("s2")}).
+It should output a formula which is true exactly for strings which are valid dates
+on or after January 1, 1600 in the form \texttt{dd-mmm-yyyy}
+(i.e., two digits for the day, three letters for the month in lower case, and four digits for the year).
+Test your regular expression first by putting in several constant string regexes (at least 5 positive and 5 negative examples)
+and second by using it to generate an arbitrary regex in the current year 2025.
 
-Test your regular expression first by putting in constant string regexes, and second
-by using it to generate an arbitrary regex in the current year 2025.
-It is OK if Z3 doesn't terminate for one of your tests (use \texttt{pytest.mark.skip})
-(but virtual bonus points if you can get Z3 to pass both tests).
+Both tests should pass in a reasonable amount of time (under 30 seconds).
+If they are taking longer, you may need to play with the encoding
+to get Z3 to work more efficiently. Come to office hours if you get stuck!
 
 \begin{verbatim}
 def valid_gregorian_date(s):
     raise NotImplementedError
 
 def test_valid_date_string_1():
-    // Use the function above to test specific valid date(s) and
-    // invalid date(s)
+    # Use the function above to test specific valid date(s) and
+    # invalid date(s)
     raise NotImplementedError
 
 def test_valid_date_string_2():
-    // Use the function to generate a date in the current year 2025
+    # Use the function to generate a date in the current year 2025
     raise NotImplementedError
 \end{verbatim}
+
+As your answer to this problem, explain how your solution works (in a paragraph) and report the results of what happens when you run it, as well as any other interesting observations.
+Attach your code with your submission.
 
 \textbf{Hints:}
 For help with Z3 regular expression syntax, it will be useful to refer to the \visiblehref{https://github.com/DavisPL-Teaching/261/blob/main/lecture2/extras/regex\_help.md}{the regex help notes} in the course repository.
@@ -112,7 +128,7 @@ Suppose we were to add an additional construct to this theory:
 \begin{center}
 \texttt{PrefixOf(StrExpr, StrExpr)}
 \end{center}
-that evaluates to true iff the first string expression is a substring of the second one.
+that evaluates to true iff the first string expression is a prefix of the second one.
 
 Prove that this would not increase the fundamental expressiveness of our theory by showing that
 any formula $\varphi$ with \texttt{PrefixOf} can be reduced to a formula $\varphi'$ without \texttt{PrefixOf} that is equivalently satisfiable.
@@ -134,8 +150,8 @@ MEXICO = 3
 BRAZIL = 4
 
 def add_user(username, location_id):
-    // username: a username of type String
-    // location_id: an integer
+    # username: a username of type String
+    # location_id: an integer
     if username == "":
         print("Error: empty username")
         return
@@ -159,13 +175,18 @@ def add_user(username, location_id):
     while "<script>" in user_token:
         print("Error: invalid user token; please try again")
 
-    database.add_user(username, location_id, user_token)
+    DB_HANDLE.get_database(location_id).add_user(username, user_token)
+
+def test_symbolic_execution():
+    # Put your symbolic path formulas and assertions here
+    raise NotImplementedError
 
 \end{verbatim}
 
 Report your answer:
 
 \begin{enumerate}[(a)]
+\item Explain your solution (in a paragraph) and attach your code. Were there any parts of the above code you found especially difficult to encode symbolically?
 \item Did Z3 find an infinite loop bug, prove that no such bug exists, or was it inconclusive (UNKNOWN on one or more paths)?
 \item How long did you find it took Z3 to solve all paths?
 \item Suppose you wanted to include all paths in the same Z3 formula to reduce the number of queries to Z3.
@@ -176,9 +197,15 @@ Sketch your answer by providing a single Z3 formula that would result from this 
 \end{enumerate}
 
 \noindent
-\textbf{Turning in:}
-Upload your solutions as a PDF in Gradescope.
-Attach your code for parts 1, 3, and 5 with your submission.
-Please name the file \texttt{hw2.py} and include any helper files.
+\textbf{Submission instructions:}
+\begin{itemize}
+\item Upload your solutions (as a PDF) and your code (in Python) in Gradescope.
+\item If you use this LaTeX template to create your solutions, please remove the problem statements
+and include only your solutions.
+\item Your code should be a file \texttt{hw2.py}, together with any necessary helper files.
+It should include your solutions for parts 1, 3, and 5.
+\item Please include all of the function names and signatures as listed in the document above,
+and do not modify any function signatures. (You are welcome to add additional functions and tests.)
+\end{itemize}
 
 \end{document}
