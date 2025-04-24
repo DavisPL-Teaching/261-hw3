@@ -1,0 +1,80 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+% ECS 261 HW2 Problem Set
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{enumerate}
+
+\usepackage[margin=1.5in]{geometry}
+
+\usepackage{hyperref}
+
+\begin{document}
+
+\title{ECS 261 HW2 Problem Set}
+\author{Your Name}
+\date{Due Friday, May 2, 2025}
+
+\maketitle
+
+\begin{enumerate}
+\item
+Say that a specification is ``expressible in Z3'' if it can be written as a Python program \texttt{def spec(prog)} that takes as input a string containing the source code of a program \texttt{prog}, and returns a Z3 formula.
+The specification is true exactly when the Z3 formula is valid.
+Show that for any two different programs \texttt{prog1} and \texttt{prog2},
+they are distinguishable: there exists a spec which \texttt{prog1} satisfies and \texttt{prog2} does not.
+Prove your answer.
+
+\item
+Consider the theory of integers and real numbers that we saw in class.
+The syntax uses function symbols $\{+, *, -\}$ and relation symbols $\{=, <\}$:
+\begin{verbatim}
+    Var ::= n1, n2, n3, ...
+    Expr ::= Expr + Expr | Expr - Expr | Expr * Expr
+            | Var | 0 | 1
+    Formula ::= Formula v Formula | Formula ^ Formula | !Formula
+            | Expr == Expr | Expr < Expr
+\end{verbatim}
+
+\begin{enumerate}[(a)]
+\item Give an example of a formula that is satisfiable over the real numbers but not the integers.
+\item Prove formally that every expression satisfiable over the integers is satisfiable over the real numbers.
+\item Define the theory of truncated 8-bit integers as follows: again we use the same grammar, but now integers are forced to be between $-2^{32}$ and $2^{32} - 1$, inclusive. If an expression goes out-of-bounds, we wrap around to the maximum value: for example, $2^{30} + 2^{30} = 2^{31} - 1$ as this is the maximum value available. Similarly $2^{16} * 2^{30} = 2^{31} - 1$, $-5 - (2^{31} - 1) = -2^{31}$ and $(-1) * (-2^{32}) = 2^{31} - 1$.
+
+Is every formula satisfiable over the integers satisfiable over this theory?
+Is every formula satisfiable over this theory satisfiable over the integers?
+Justify both answers.
+\end{enumerate}
+
+\item
+\emph{Symbolic execution} is a static analysis technique where we ``run'' a program by evaluating expressions as symbols and formulas,
+instead of using concrete values.
+For example, the function in Python \texttt{def add(x):} with body \texttt{return x + 7} would normally be evaluated
+by plugging an integer like $10$ and returning $17$. With symbolic execution, instead we plug in the value
+\texttt{z3.Int("x")} and return the value \texttt{z3.Int("x") + 7}, that is we return the symbolic integer expression $(x + 7)$. We can then answer questions aout the behavior of the function, for example, ``does there exist an input for which the output is exactly $10$?'' or ``does there exist an input for which the output is out of bounds for an array?'' by making a query to Z3.
+
+Use Z3 to decide whether the following has an infinite loop bug.
+The program has 4 paths leading up to the potential infinite loop; you don't need to implement a general symbolic execution engine, just describe the Z3 formula along each path.
+
+\begin{verbatim}
+TODO
+\end{verbatim}
+
+Report your answer:
+
+\begin{enumerate}[(a)]
+\item Did Z3 find an infinite loop bug, prove that no such bug exists, or was it inconclusive (UNKNOWN on one or more paths)?
+\item How long did you find it took Z3 to solve all paths?
+\item Suppose you wanted to include all paths in the same Z3 formula to reduce the number of queries to Z3.
+(This can be helpful for performance in some cases.) How would you propose doing so with the above technique?
+Sketch your answer by providing a single Z3 formula that would result from this solution.
+\end{enumerate}
+
+Attach your Z3 code with your submission as a file \texttt{hw2\_q2.py}.
+
+\end{enumerate}
+
+\end{document}
