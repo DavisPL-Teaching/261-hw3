@@ -1,6 +1,6 @@
 # ECS 261 Homework 2
 
-## Due: Monday, May 5, 2025
+## Due: Tuesday, May 6, 2025
 
 This homework is a problem set. Please see `hw2.pdf` for further instructions.
 
