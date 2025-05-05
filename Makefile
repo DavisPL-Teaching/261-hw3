@@ -1,4 +1,4 @@
-.PHONY: view build show-input-files pre post aux spellcheck full clean
+.PHONY: view build show-input-files pre post aux spellcheck full clean copy
 .DEFAULT_GOAL: view
 
 MAIN_TEX = hw2.tex
@@ -22,7 +22,7 @@ view: build
 	open build/$(MAIN_OUT)
 
 # Build the PDF
-build: build/$(MAIN_OUT)
+build: build/$(MAIN_OUT) copy
 
 # Run pdflatex with prettified (less verbose) output
 # Requires texfot (which I believe is installed by default with most distros)
@@ -46,6 +46,9 @@ build/$(MAIN_OUT): $(SRC_FILES) $(BIB_FILES) $(IMG_FILES)
 	&& cd .. \
 	&& rm -rf build/ \
 	&& exit 1 )
+
+copy: build/$(MAIN_OUT)
+	cp build/$(MAIN_OUT) $(MAIN_OUT)
 
 # Show all sources picked up by the Makefile (useful for debugging)
 show-input-files:
@@ -76,14 +79,6 @@ spellcheck:
 
 # Build final version for publishing
 full: clean spellcheck pre build post
-
-# Build final version for submission to arXiv
-# Creates ready-to-upload src_arXiv/ and arXiv.zip
-arxiv: full
-	pip install arxiv-latex-cleaner
-	arxiv_latex_cleaner src --resize_images --im_size 500
-	cp build/*.bbl src_arXiv/
-	zip -vr arXiv.zip src_arXiv/ -x "*.DS_Store"
 
 # Clean up
 # Separating out build/ simplifies cleanup considerably.

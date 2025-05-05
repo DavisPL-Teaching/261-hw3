@@ -80,6 +80,8 @@ Recall the syntax as follows:
 Is every formula satisfiable over the integers satisfiable over this theory?
 Is every formula satisfiable over this theory satisfiable over the integers?
 Justify both answers.
+
+\textbf{Note:} Make sure you reference the grammar above: notice that there is no syntax for integer constants other than $0$ or $1$. Constants like $2^{30}$ are thus shorthand for $1 + 1 + \cdots + 1$ (for sufficiently many $1$'s). You will need to keep this in mind. For example, if your formula has something like $2^{40}$, an integer that doesn’t exist in the truncated theory, it will just be evaluated to $\texttt{MAX}$.
 \end{enumerate}
 
 \item
@@ -94,7 +96,7 @@ or a string expression (like \texttt{z3.String("s1") + z3.String("s2")}).
 It should output a formula which is true exactly for strings which are valid dates
 on or after January 1, 1600 in the form \texttt{dd-mmm-yyyy}
 (i.e., two digits for the day, three letters for the month in lower case, and four digits for the year).
-Test your regular expression first by putting in several constant string regexes (at least 5 positive and 5 negative examples)
+Test your regular expression first by putting in several constant string expressions (at least 5 positive and 5 negative examples)
 and second by using it to generate an arbitrary regex in the current year 2025.
 
 Both tests should pass in a reasonable amount of time (under 30 seconds).
@@ -123,7 +125,18 @@ For help with Z3 regular expression syntax, it will be useful to refer to the \v
 You may also want to review the rules for leap days; see \visiblehref{https://en.wikipedia.org/wiki/February\_29}{Wikipedia.}
 
 \item
-Consider the grammar for the theory of strings (the basic version that just includes string variables, concatenation, character constants, length constraings, and regex constraints).
+Consider the grammar for the theory of strings (the basic version that just includes string variables, concatenation, character constants, length constraints, and regex constraints).
+\begin{verbatim}
+    StrExpr ::= StrVar | Concat(StrExpr, StrExpr) | EmptyString
+            | Char(sigma) (where sigma is a character literal)
+    Formula ::= Formula ^ Formula | Formula v Formula | !Formula
+            | StrExpr == StrExpr
+            | Len(StrExpr) <= n (where n is an integer literal)
+            | InRe(StrExpr, RegEx)
+    RegEx R ::= EmptySet | Epsilon | Union(R, R) | Concat(R, R) | Star(R)
+            | Char(sigma) (where sigma is a character literal)
+\end{verbatim}
+
 Suppose we were to add an additional construct to this theory:
 \begin{center}
 \texttt{PrefixOf(StrExpr, StrExpr)}
@@ -133,6 +146,9 @@ that evaluates to true iff the first string expression is a prefix of the second
 Prove that this would not increase the fundamental expressiveness of our theory by showing that
 any formula $\varphi$ with \texttt{PrefixOf} can be reduced to a formula $\varphi'$ without \texttt{PrefixOf} that is equivalently satisfiable.
 That is, $\varphi$ is satisfiable iff $\varphi'$ is satisfiable.
+
+\textbf{Note:}
+Please ensure that you only use the syntax from the grammar above. Two notes: (1) we do not have string indexing; (2) we are not allowed to create regular expressions from string variables. You may assume the alphabet of characters is finite.
 
 \item
 \emph{Symbolic execution} is a static analysis technique where we ``run'' a program by evaluating expressions as symbols and formulas, instead of using concrete values.
