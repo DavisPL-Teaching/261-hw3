@@ -74,7 +74,7 @@ Recall the syntax as follows:
 
 \begin{enumerate}[(a)]
 \item Give an example of a formula that is satisfiable over the real numbers but not the integers.
-\item Prove formally that every expression satisfiable over the integers is satisfiable over the real numbers.
+\item Prove formally that every formula satisfiable over the integers is satisfiable over the real numbers.
 \item Define the theory of truncated 32-bit integers as follows: again we use the same grammar, but now integers are forced to be between $\texttt{MIN} = -2^{31}$ and $\texttt{MAX} = 2^{31} - 1$, inclusive. If an expression goes out-of-bounds, we wrap around to the maximum value: for example, $2^{30} + 2^{30} = \texttt{MAX}$ as this is the maximum value available. Similarly $2^{16} * 2^{30} = \texttt{MAX}$, $(-5) - \texttt{MAX} = \texttt{MIN}$ and $(-2^{20}) * (-2^{20}) = \texttt{MAX}$.
 
 Is every formula satisfiable over the integers satisfiable over this theory?
