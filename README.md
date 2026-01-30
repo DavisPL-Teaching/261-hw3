@@ -1,6 +1,6 @@
-# ECS 261 Homework 4 (Optional)
+# ECS 261 Homework 4
 
-## Due: Friday, May 30, 2025
+## Due: TBD
 
 **This homework is optional.** If you choose to complete it, it will be used to replace your lowest homework score (that is, the lowest of the four homework scores will be dropped).
 It should be submitted by the deadline above.
