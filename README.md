@@ -1,11 +1,9 @@
-# ECS 261 Homework 4
+# ECS 261 Homework 3
 
-## Due: TBD
+## Due: Friday, February 27, 2026 (11:59pm)
 
-**This homework is optional.** If you choose to complete it, it will be used to replace your lowest homework score (that is, the lowest of the four homework scores will be dropped).
-It should be submitted by the deadline above.
-Please note that Q4 requires some knowledge of Hoare logic which will be covered in class on Tuesday, May 13 and Thursday, May 15.
+This homework is a problem set. Please see `hw3.pdf` for further instructions.
 
-This homework is a problem set. Please see `hw4.pdf` for further instructions.
+To submit the homework, please upload your solutions as a PDF (`hw4.pdf`) *and* accompanying code (`hw4.dfy` plus any corresponding helper files) to Gradescope. You are encouraged (but not required) to write your solutions in LaTeX; if you would like to edit `hw4.tex` directly, please remove or comment out the problem statements and include only your solutions. The homework should be typed.
 
-To submit the homework, you will upload your solutions as a PDF (`hw4.pdf`) and accompanying code (`hw4.dfy` plus any corresponding helper files) to Gradescope. You are encouraged (but not required) to write your solutions in LaTeX; if you would like to edit `hw4.tex` directly, please remove or comment out the problem statements and include only your solutions.
+This homework continues with Dafny and its logical foundations (strongest postconditions, weakest preconditions, and Hoare logic). For the Hoare logic question, it will be helpful to see some coverage of Hoare logic which we will cover in class this week.

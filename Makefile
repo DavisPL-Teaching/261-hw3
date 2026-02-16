@@ -1,9 +1,9 @@
 .PHONY: view build show-input-files pre post aux spellcheck full clean copy
 .DEFAULT_GOAL: view
 
-MAIN_TEX = hw4.tex
-MAIN_AUX = hw4.aux
-MAIN_OUT = hw4.pdf
+MAIN_TEX = hw3.tex
+MAIN_AUX = hw3.aux
+MAIN_OUT = hw3.pdf
 
 SRC_FILES = $(wildcard *.tex)
 BIB_FILES = $(wildcard *.bib)

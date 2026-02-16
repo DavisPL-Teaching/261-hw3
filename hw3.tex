@@ -27,24 +27,18 @@
 
 \begin{document}
 
-\title{HW4 Problem Set (Optional)}
+\title{HW3 Problem Set}
 \author{ECS 261}
-\date{Due: Friday, May 30, 2025}
+\date{Due: Friday, February 27, 2026}
 
 \maketitle
-
-\noindent
-\textbf{This homework is optional.}
-If you choose to complete it, it will be used to replace your lowest homework score (that is, the lowest of the four homework scores will be dropped).
-It should be submitted by Friday, May 30, 2025.
-Please note that Q4 requires some knowledge of Hoare logic which will be covered in class on Tuesday, May 13 and Thursday, May 15.
 
 \noindent\hrulefill
 
 \begin{enumerate}
 
 \item
-In class we saw that it is sometimes possible that there are multiple different loop invariants
+It is sometimes possible that there are multiple different loop invariants
 which can be used to prove a program correct.
 Here is a simple toy program which tries to search for the number 10.
 \begin{verbatim}
@@ -133,8 +127,7 @@ Explain why this does not prove the Collatz conjecture and, more generally,
 why it does not contradict the result from class that some statements are true but not provable.
 
 \end{enumerate}
-
-\item
+\emph{Hoare Logic:}
 The Hoare triple $\hoare{P}{C}{Q}$ means that if the program $C$ is started in a state
 satisfying the precondition $P$, and assuming the program terminates,
 it is guaranteed to terminate in a state satisfying the postcondition $Q$.
