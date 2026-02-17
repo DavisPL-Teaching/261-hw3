@@ -1,6 +1,6 @@
 # ECS 261 Homework 3
 
-## Due: Friday, February 27, 2026 (11:59pm)
+## Due: Tuesday, February 24, 2026 (11:59pm)
 
 This homework is a problem set. Please see `hw3.pdf` for further instructions.
 
