@@ -71,13 +71,18 @@ Given a precondition and a program, the \emph{strongest postcondition} is the st
 Given a precondition and a program, the \emph{weakest precondition} is the weakest possible precondition such that if the program starts in a state satisfying the precondition, and if it terminates, it is guaranteed to terminate in a state satisfying the postcondition.
 
 For a program $P$, state which of the following is possible.
-If it is possible, give an example;
+If it is possible, give an example and explanation;
 if it is impossible, give a short proof.
 For all parts, preconditions and postconditions are considered the same if they are
 logically equivalent as formulas (i.e., each one implies the other).
 
 Please assume a program that doesn't crash on any inputs, and doesn't have infinite loops.
 Also, assume that the program does not use \texttt{assert} or \texttt{assume}.
+
+\textbf{Grading notes:}
+Please include a \emph{specific example program or programs} for each part, along with specific example precondition(s)/postcondition(s);
+Please briefly explain why your example shows that the statement is possible,
+or give a rigorous proof of why it is impossible.
 
 \begin{enumerate}[(a)]
 \item
@@ -89,6 +94,26 @@ Two different postconditions have the same weakest precondition.
 $\varphi$ is the weakest precondition for $\psi$ but $\psi$ is not the strongest postcondition for $\varphi$.
 \item
 The weakest precondition of \texttt{true} is \texttt{false}.
+
+    % EXample as a picture
+
+    % { weakest possible precondition here }
+    % MyProgram;
+    % { true }
+
+    % weakest precondition of Q:
+
+    %     { **weakest precondition goes here** }
+    %     MyProgram
+    %     { Q }
+
+    % strongest postcondition of P:
+
+    %     { P }
+    %     MyProgram
+    %     { **strongest postcondition goes here** }
+
+
 \item
 The weakest precondition of \texttt{false} is \texttt{true}.
 \end{enumerate}
